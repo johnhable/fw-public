@@ -3,10 +3,6 @@
 
 #include "FilmicColorGrading.h"
 
-//#include "PowSolver.h"
-
-#pragma optimize("",off)
-
 float FilmicToneCurve::CurveSegment::Eval(float x) const
 {
 	float x0 = (x - m_offsetX)*m_scaleX;

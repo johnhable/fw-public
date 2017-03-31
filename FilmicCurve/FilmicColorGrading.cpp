@@ -1,7 +1,5 @@
 #include "FilmicColorGrading.h"
 
-#pragma optimize("",off)
-
 float FilmicColorGrading::ApplyLiftInvGammaGain(const float lift, const float invGamma, const float gain, float v)
 {
 	// lerp gain
