@@ -210,8 +210,6 @@ void Mat44::RtFromXform(Mat33 & R, Vec3 & t, const Mat44 & M)
 
 static const float s_degToRad = 3.14159f/180.0f;
 
-#pragma optimize("",off)
-
 Mat44 Mat44::RotationX(float angleDeg)
 {
 	Mat44 ret = RotationArbitrary(angleDeg,Vec3(1,0,0));
