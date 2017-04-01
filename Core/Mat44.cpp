@@ -134,143 +134,52 @@ Vec3 Mat44::MulMatPointAndDivideTranspose(const Mat44 & srcLhs, const Vec3 & rhs
 }
 
 
-
-
-// http://stackoverflow.com/questions/1148309/inverting-a-4x4-matrix/1148405#1148405
-static bool my_gluInvertMatrix(const float m[16], float invOut[16])
-{
-    float inv[16], det;
-    int i;
-
-    inv[0] = m[5]  * m[10] * m[15] - 
-             m[5]  * m[11] * m[14] - 
-             m[9]  * m[6]  * m[15] + 
-             m[9]  * m[7]  * m[14] +
-             m[13] * m[6]  * m[11] - 
-             m[13] * m[7]  * m[10];
-
-    inv[4] = -m[4]  * m[10] * m[15] + 
-              m[4]  * m[11] * m[14] + 
-              m[8]  * m[6]  * m[15] - 
-              m[8]  * m[7]  * m[14] - 
-              m[12] * m[6]  * m[11] + 
-              m[12] * m[7]  * m[10];
-
-    inv[8] = m[4]  * m[9] * m[15] - 
-             m[4]  * m[11] * m[13] - 
-             m[8]  * m[5] * m[15] + 
-             m[8]  * m[7] * m[13] + 
-             m[12] * m[5] * m[11] - 
-             m[12] * m[7] * m[9];
-
-    inv[12] = -m[4]  * m[9] * m[14] + 
-               m[4]  * m[10] * m[13] +
-               m[8]  * m[5] * m[14] - 
-               m[8]  * m[6] * m[13] - 
-               m[12] * m[5] * m[10] + 
-               m[12] * m[6] * m[9];
-
-    inv[1] = -m[1]  * m[10] * m[15] + 
-              m[1]  * m[11] * m[14] + 
-              m[9]  * m[2] * m[15] - 
-              m[9]  * m[3] * m[14] - 
-              m[13] * m[2] * m[11] + 
-              m[13] * m[3] * m[10];
-
-    inv[5] = m[0]  * m[10] * m[15] - 
-             m[0]  * m[11] * m[14] - 
-             m[8]  * m[2] * m[15] + 
-             m[8]  * m[3] * m[14] + 
-             m[12] * m[2] * m[11] - 
-             m[12] * m[3] * m[10];
-
-    inv[9] = -m[0]  * m[9] * m[15] + 
-              m[0]  * m[11] * m[13] + 
-              m[8]  * m[1] * m[15] - 
-              m[8]  * m[3] * m[13] - 
-              m[12] * m[1] * m[11] + 
-              m[12] * m[3] * m[9];
-
-    inv[13] = m[0]  * m[9] * m[14] - 
-              m[0]  * m[10] * m[13] - 
-              m[8]  * m[1] * m[14] + 
-              m[8]  * m[2] * m[13] + 
-              m[12] * m[1] * m[10] - 
-              m[12] * m[2] * m[9];
-
-    inv[2] = m[1]  * m[6] * m[15] - 
-             m[1]  * m[7] * m[14] - 
-             m[5]  * m[2] * m[15] + 
-             m[5]  * m[3] * m[14] + 
-             m[13] * m[2] * m[7] - 
-             m[13] * m[3] * m[6];
-
-    inv[6] = -m[0]  * m[6] * m[15] + 
-              m[0]  * m[7] * m[14] + 
-              m[4]  * m[2] * m[15] - 
-              m[4]  * m[3] * m[14] - 
-              m[12] * m[2] * m[7] + 
-              m[12] * m[3] * m[6];
-
-    inv[10] = m[0]  * m[5] * m[15] - 
-              m[0]  * m[7] * m[13] - 
-              m[4]  * m[1] * m[15] + 
-              m[4]  * m[3] * m[13] + 
-              m[12] * m[1] * m[7] - 
-              m[12] * m[3] * m[5];
-
-    inv[14] = -m[0]  * m[5] * m[14] + 
-               m[0]  * m[6] * m[13] + 
-               m[4]  * m[1] * m[14] - 
-               m[4]  * m[2] * m[13] - 
-               m[12] * m[1] * m[6] + 
-               m[12] * m[2] * m[5];
-
-    inv[3] = -m[1] * m[6] * m[11] + 
-              m[1] * m[7] * m[10] + 
-              m[5] * m[2] * m[11] - 
-              m[5] * m[3] * m[10] - 
-              m[9] * m[2] * m[7] + 
-              m[9] * m[3] * m[6];
-
-    inv[7] = m[0] * m[6] * m[11] - 
-             m[0] * m[7] * m[10] - 
-             m[4] * m[2] * m[11] + 
-             m[4] * m[3] * m[10] + 
-             m[8] * m[2] * m[7] - 
-             m[8] * m[3] * m[6];
-
-    inv[11] = -m[0] * m[5] * m[11] + 
-               m[0] * m[7] * m[9] + 
-               m[4] * m[1] * m[11] - 
-               m[4] * m[3] * m[9] - 
-               m[8] * m[1] * m[7] + 
-               m[8] * m[3] * m[5];
-
-    inv[15] = m[0] * m[5] * m[10] - 
-              m[0] * m[6] * m[9] - 
-              m[4] * m[1] * m[10] + 
-              m[4] * m[2] * m[9] + 
-              m[8] * m[1] * m[6] - 
-              m[8] * m[2] * m[5];
-
-    det = m[0] * inv[0] + m[1] * inv[4] + m[2] * inv[8] + m[3] * inv[12];
-
-    if (det == 0)
-        return false;
-
-    det = 1.0 / det;
-
-    for (i = 0; i < 16; i++)
-        invOut[i] = inv[i] * det;
-
-    return true;
-}
-
 bool Mat44::Invert(Mat44 & dst, const Mat44 & src)
 {
-	bool bRet = my_gluInvertMatrix(&src.m_data[0],&dst.m_data[0]);
-	return bRet;
+	float a00 = src.m_data[0*4+0];
+	float a01 = src.m_data[0*4+1];
+	float a02 = src.m_data[0*4+2];
+	float a03 = src.m_data[0*4+3];
+	float a10 = src.m_data[1*4+0];
+	float a11 = src.m_data[1*4+1];
+	float a12 = src.m_data[1*4+2];
+	float a13 = src.m_data[1*4+3];
+	float a20 = src.m_data[2*4+0];
+	float a21 = src.m_data[2*4+1];
+	float a22 = src.m_data[2*4+2];
+	float a23 = src.m_data[2*4+3];
+	float a30 = src.m_data[3*4+0];
+	float a31 = src.m_data[3*4+1];
+	float a32 = src.m_data[3*4+2];
+	float a33 = src.m_data[3*4+3];
+
+	float d0 = a11*a22*a33 + a12*a23*a31 + a13*a21*a32 - a11*a23*a32 - a12*a21*a33 - a13*a22*a31;
+	float d1 = a10*a23*a32 + a12*a20*a33 + a13*a22*a30 - a10*a22*a33 - a12*a23*a30 - a13*a20*a32;
+	float d2 = a10*a21*a33 + a11*a23*a30 + a13*a20*a31 - a10*a23*a31 - a11*a20*a33 - a13*a21*a30;
+	float d3 = a10*a22*a31 + a11*a20*a32 + a12*a21*a30 - a10*a21*a32 - a11*a22*a30 - a12*a20*a31;
+	float det = a00*d0 + a01*d1 + a02*d2 + a03*d3;
+
+	if (det == 0.0f)
+		return false;
+
+	dst.m_data[0*4+0] = (a11*a22*a33 + a12*a23*a31 + a13*a21*a32 - a11*a23*a32 - a12*a21*a33 - a13*a22*a31)/det;
+	dst.m_data[0*4+1] = (a01*a23*a32 + a02*a21*a33 + a03*a22*a31 - a01*a22*a33 - a02*a23*a31 - a03*a21*a32)/det;
+	dst.m_data[0*4+2] = (a01*a12*a33 + a02*a13*a31 + a03*a11*a32 - a01*a13*a32 - a02*a11*a33 - a03*a12*a31)/det;
+	dst.m_data[0*4+3] = (a01*a13*a22 + a02*a11*a23 + a03*a12*a21 - a01*a12*a23 - a02*a13*a21 - a03*a11*a22)/det;
+	dst.m_data[1*4+0] = (a10*a23*a32 + a12*a20*a33 + a13*a22*a30 - a10*a22*a33 - a12*a23*a30 - a13*a20*a32)/det;
+	dst.m_data[1*4+1] = (a00*a22*a33 + a02*a23*a30 + a03*a20*a32 - a00*a23*a32 - a02*a20*a33 - a03*a22*a30)/det;
+	dst.m_data[1*4+2] = (a00*a13*a32 + a02*a10*a33 + a03*a12*a30 - a00*a12*a33 - a02*a13*a30 - a03*a10*a32)/det;
+	dst.m_data[1*4+3] = (a00*a12*a23 + a02*a13*a20 + a03*a10*a22 - a00*a13*a22 - a02*a10*a23 - a03*a12*a20)/det;
+	dst.m_data[2*4+0] = (a10*a21*a33 + a11*a23*a30 + a13*a20*a31 - a10*a23*a31 - a11*a20*a33 - a13*a21*a30)/det;
+	dst.m_data[2*4+1] = (a00*a23*a31 + a01*a20*a33 + a03*a21*a30 - a00*a21*a33 - a01*a23*a30 - a03*a20*a31)/det;
+	dst.m_data[2*4+2] = (a00*a11*a33 + a01*a13*a30 + a03*a10*a31 - a00*a13*a31 - a01*a10*a33 - a03*a11*a30)/det;
+	dst.m_data[2*4+3] = (a00*a13*a21 + a01*a10*a23 + a03*a11*a20 - a00*a11*a23 - a01*a13*a20 - a03*a10*a21)/det;
+	dst.m_data[3*4+0] = (a10*a22*a31 + a11*a20*a32 + a12*a21*a30 - a10*a21*a32 - a11*a22*a30 - a12*a20*a31)/det;
+	dst.m_data[3*4+1] = (a00*a21*a32 + a01*a22*a30 + a02*a20*a31 - a00*a22*a31 - a01*a20*a32 - a02*a21*a30)/det;
+	dst.m_data[3*4+2] = (a00*a12*a31 + a01*a10*a32 + a02*a11*a30 - a00*a11*a32 - a01*a12*a30 - a02*a10*a31)/det;
+	dst.m_data[3*4+3] = (a00*a11*a22 + a01*a12*a20 + a02*a10*a21 - a00*a12*a21 - a01*a10*a22 - a02*a11*a20)/det;
+
+	return true;
 }
 
 Mat44 Mat44::XformFromRt(const Mat33 & R, const Vec3 & t)

@@ -58,25 +58,32 @@ inline Mat33 Mat33::Transpose(const Mat33 & src)
 	return ret;
 }
 
-
-
-//http://stackoverflow.com/questions/983999/simple-3x3-matrix-inverse-code-c
 inline Mat33 Mat33::Inverse(const Mat33 & src)
 {
+	// to avoid massive dereferencing, copy the values
+	float a00 = src.m_data[0*3+0];
+	float a01 = src.m_data[0*3+1];
+	float a02 = src.m_data[0*3+2];
+	float a10 = src.m_data[1*3+0];
+	float a11 = src.m_data[1*3+1];
+	float a12 = src.m_data[1*3+2];
+	float a20 = src.m_data[2*3+0];
+	float a21 = src.m_data[2*3+1];
+	float a22 = src.m_data[2*3+2];
+
+	// find determinant
+	double det =  a00*a11*a22+a10*a21*a02+a20*a01*a12-a00*a21*a12-a20*a11*a02-a10*a01*a22;
+
 	Mat33 dst;
-	float determinant =    +src.m_data[0*3+0]*(src.m_data[1*3+1]*src.m_data[2*3+2]-src.m_data[2*3+1]*src.m_data[1*3+2])
-							-src.m_data[0*3+1]*(src.m_data[1*3+0]*src.m_data[2*3+2]-src.m_data[1*3+2]*src.m_data[2*3+0])
-							+src.m_data[0*3+2]*(src.m_data[1*3+0]*src.m_data[2*3+1]-src.m_data[1*3+1]*src.m_data[2*3+0]);
-	float invdet = 1/determinant;
-	dst.m_data[0*3+0] =  (src.m_data[1*3+1]*src.m_data[2*3+2]-src.m_data[2*3+1]*src.m_data[1*3+2])*invdet;
-	dst.m_data[1*3+0] = -(src.m_data[0*3+1]*src.m_data[2*3+2]-src.m_data[0*3+2]*src.m_data[2*3+1])*invdet;
-	dst.m_data[2*3+0] =  (src.m_data[0*3+1]*src.m_data[1*3+2]-src.m_data[0*3+2]*src.m_data[1*3+1])*invdet;
-	dst.m_data[0*3+1] = -(src.m_data[1*3+0]*src.m_data[2*3+2]-src.m_data[1*3+2]*src.m_data[2*3+0])*invdet;
-	dst.m_data[1*3+1] =  (src.m_data[0*3+0]*src.m_data[2*3+2]-src.m_data[0*3+2]*src.m_data[2*3+0])*invdet;
-	dst.m_data[2*3+1] = -(src.m_data[0*3+0]*src.m_data[1*3+2]-src.m_data[1*3+0]*src.m_data[0*3+2])*invdet;
-	dst.m_data[0*3+2] =  (src.m_data[1*3+0]*src.m_data[2*3+1]-src.m_data[2*3+0]*src.m_data[1*3+1])*invdet;
-	dst.m_data[1*3+2] = -(src.m_data[0*3+0]*src.m_data[2*3+1]-src.m_data[2*3+0]*src.m_data[0*3+1])*invdet;
-	dst.m_data[2*3+2] =  (src.m_data[0*3+0]*src.m_data[1*3+1]-src.m_data[1*3+0]*src.m_data[0*3+1])*invdet;
+	dst.m_data[0] = (a11*a22 - a12*a21)/det;
+	dst.m_data[3] = (a12*a20 - a10*a22)/det;
+	dst.m_data[6] = (a10*a21 - a11*a20)/det;
+	dst.m_data[1] = (a02*a21 - a01*a22)/det;
+	dst.m_data[4] = (a00*a22 - a02*a20)/det;
+	dst.m_data[7] = (a01*a20 - a00*a21)/det;
+	dst.m_data[2] = (a01*a12 - a02*a11)/det;
+	dst.m_data[5] = (a02*a10 - a00*a12)/det;
+	dst.m_data[8] = (a00*a11 - a01*a10)/det;
 
 	return dst;
 }
