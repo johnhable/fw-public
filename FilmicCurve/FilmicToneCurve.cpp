@@ -134,8 +134,8 @@ void FilmicToneCurve::CreateCurve(FullCurve & dstCurve, const CurveParamsDirect 
 		shoulderM = EvalDerivativeLinearGamma(m,b,g,params.m_x1);
 
 		// apply gamma to endpoints
-		params.m_y0 = powf(params.m_y0,params.m_gamma);
-		params.m_y1 = powf(params.m_y1,params.m_gamma);
+		params.m_y0 = MaxFloat(1e-5f,powf(params.m_y0,params.m_gamma));
+		params.m_y1 = MaxFloat(1e-5f,powf(params.m_y1,params.m_gamma));
 
 		params.m_overshootY = powf(1.0f + params.m_overshootY,params.m_gamma) - 1.0f;
 	}
@@ -217,10 +217,10 @@ void FilmicToneCurve::CalcDirectParamsFromUser(CurveParamsDirect & dstParams, co
 
 	// constraints
 	{
-		toeLength = Saturate(toeLength);
+		toeLength = powf(Saturate(toeLength),perceptualGamma);
 		toeStrength = Saturate(toeStrength);
 		shoulderAngle = Saturate(shoulderAngle);
-		shoulderLength = Saturate(shoulderLength);
+		shoulderLength = MaxFloat(1e-5f,Saturate(shoulderLength));
 
 		shoulderStrength = MaxFloat(0.0f,shoulderStrength);
 	}
@@ -244,11 +244,10 @@ void FilmicToneCurve::CalcDirectParamsFromUser(CurveParamsDirect & dstParams, co
 
 		float W = initialW + extraW;
 
-		// to adjust the perceptual gamma space, apply power
-		dstParams.m_x0 = powf(x0,perceptualGamma);
-		dstParams.m_y0 = powf(y0,perceptualGamma);
-		dstParams.m_x1 = powf(x1,perceptualGamma);
-		dstParams.m_y1 = powf(y1,perceptualGamma);
+		dstParams.m_x0 = x0;
+		dstParams.m_y0 = y0;
+		dstParams.m_x1 = x1;
+		dstParams.m_y1 = y1;
 		dstParams.m_W = W;
 
 		// bake the linear to gamma space conversion

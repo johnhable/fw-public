@@ -16,7 +16,7 @@ public:
 			m_shoulderStrength = 0.0f; // white point
 			m_shoulderLength = 0.5f;
 
-			m_shoulderAngle = 0.5f;
+			m_shoulderAngle = 0.0f;
 			m_gamma = 1.0f;
 		}
 		float m_toeStrength; // as a ratio

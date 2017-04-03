@@ -30,10 +30,10 @@ public:
 
 			// filmic tonemapping
 			m_filmicToeStrength = 0.0f;
-			m_filmicToeLength = 0.0f;
+			m_filmicToeLength = 0.5f;
 			m_filmicShoulderStrength = 0.0f;
-			m_filmicShoulderLength = 0.0f;
-			m_filmicShoulderAngle = 0.5f;
+			m_filmicShoulderLength = 0.5f;
+			m_filmicShoulderAngle = 0.0f;
 			m_filmicGamma = 1.0f;
 
 
