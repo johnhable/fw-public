@@ -21,6 +21,7 @@ FilmicColorGrading::BakeFromEvalParams(bakeParams,evalParams,256,FilmicColorGrad
 ...
 
 Vec3 srcColor = ...;
+
 Vec3 dstColor = bakeParams.Eval(srcColor);
 
 
