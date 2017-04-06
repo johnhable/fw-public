@@ -19,6 +19,7 @@ FilmicColorGrading::EvalFromRawParams(evalParams,rawParams);
 FilmicColorGrading::BakeFromEvalParams(bakeParams,evalParams,256,FilmicColorGrading::kTableSpacing_Quadratic);
 
 ...
+
 Vec3 srcColor = ...;
 Vec3 dstColor = bakeParams.Eval(srcColor);
 
