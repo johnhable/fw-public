@@ -100,7 +100,6 @@ void FilmicToneCurve::CreateCurve(FullCurve & dstCurve, const CurveParamsDirect 
 
 	float toeM = 0.0f;
 	float shoulderM = 0.0f;
-	float endpointM = 0.0f;
 	{
 		float m, b;
 		AsSlopeIntercept(m,b,params.m_x0,params.m_x1,params.m_y0,params.m_y1);
