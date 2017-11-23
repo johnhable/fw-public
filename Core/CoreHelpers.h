@@ -1,7 +1,19 @@
 #ifndef _CORE_HELPERS_H_
 #define _CORE_HELPERS_H_
 
+#ifdef _MSC_VER
 #include <Windows.h>
+#else
+// restrict(xxx) not implemented on GCC/Clang as yet -- just stub it out.
+#define restrict(x)
+
+// Mac / Linux have no DebugBreak(), directly fire int 3 instead.
+#define DebugBreak() asm("int $3")
+
+// Used in place of QueryPerformanceCounter
+#include <chrono>
+#endif // _MSC_VER
+
 #include <stdio.h>
 #include <vector>
 #include <string>
@@ -84,8 +96,9 @@ inline std::string FourDigitString(int i)
 }
 
 
-inline unsigned __int64 GetQualityTimeMicroSec()
+inline uint64_t GetQualityTimeMicroSec()
 {
+#ifdef _MSC_VER
 	LARGE_INTEGER freq;
 	LARGE_INTEGER currTime;
 	BOOL bRet;
@@ -98,7 +111,11 @@ inline unsigned __int64 GetQualityTimeMicroSec()
 	double numSec = ((double)currTime.QuadPart)/((double)freq.QuadPart);
 	unsigned __int64 microSec = (unsigned __int64)(numSec * 1000000.0);
 	return microSec;
-
+#else
+    auto now = std::chrono::steady_clock::now();
+    uint64_t micros = std::chrono::duration_cast<std::chrono::microseconds>(now.time_since_epoch()).count();
+    return micros;
+#endif
 }
 
 
@@ -117,7 +134,7 @@ inline A AlignSize(A x, B size)
 	*/
 }
 
-inline unsigned __int64 AlignSize64(unsigned __int64 x, unsigned __int64 size)
+inline uint64_t AlignSize64(uint64_t x, uint64_t size)
 {
 	return (((x+size)-1)/size)*size;
 }

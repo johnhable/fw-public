@@ -119,27 +119,27 @@ static Vec3 ColorLinearFromGammaNormalize(Vec3 val)
 	// change the perceived luminance.
 
 	Vec3 ret = val;
-	val.x = powf(val.x,2.2f);
-	val.y = powf(val.y,2.2f);
-	val.z = powf(val.z,2.2f);
+	ret.x = powf(ret.x,2.2f);
+	ret.y = powf(ret.y,2.2f);
+	ret.z = powf(ret.z,2.2f);
 
-	float mid = (val.x+val.y+val.z)/3.0f;
+	float mid = (ret.x+ret.y+ret.z)/3.0f;
 
-	val.x /= mid;
-	val.y /= mid;
-	val.z /= mid;
+	ret.x /= mid;
+	ret.y /= mid;
+	ret.z /= mid;
 
-	return val;
+	return ret;
 }
 
 static Vec3 ColorLinearFromGamma(Vec3 val)
 {
 	Vec3 ret = val;
-	val.x = powf(val.x,2.2f);
-	val.y = powf(val.y,2.2f);
-	val.z = powf(val.z,2.2f);
+	ret.x = powf(ret.x,2.2f);
+	ret.y = powf(ret.y,2.2f);
+	ret.z = powf(ret.z,2.2f);
 
-	return val;
+	return ret;
 }
 
 void FilmicColorGrading::RawFromUserParams(RawParams & rawParams, const UserParams & userParams)

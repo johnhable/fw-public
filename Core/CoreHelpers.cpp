@@ -1,7 +1,10 @@
 #include "CoreHelpers.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <Windows.h>
+
+#ifndef _MSC_VER
+#include <time.h>
+#endif
 
 #pragma optimize("",off)
 
@@ -55,10 +58,12 @@ std::string GetNextLineFromFile(FILE * fin, bool & isEof)
 
 std::string LocalTimeAsString()
 {
+	char buf[2048];
+
+#if _MSC_VER
 	SYSTEMTIME currTime;
 	GetLocalTime(&currTime);
 
-	char buf[2048];
 	sprintf(buf,"%04d_%02d_%02d__%02d_%02d_%02d",
 		(int)currTime.wYear,
 		(int)currTime.wMonth,
@@ -66,6 +71,21 @@ std::string LocalTimeAsString()
 		(int)currTime.wHour,
 		(int)currTime.wMinute,
 		(int)currTime.wSecond);
+#else
+    time_t rawtime;
+    time(&rawtime);
+
+    struct tm local;
+    localtime_r(&rawtime, &local);
+
+	sprintf(buf,"%04d_%02d_%02d__%02d_%02d_%02d",
+		(int)local.tm_year,
+		(int)local.tm_mon,
+		(int)local.tm_mday,
+		(int)local.tm_hour,
+		(int)local.tm_min,
+		(int)local.tm_sec);
+#endif
 
 	return buf;
 }
