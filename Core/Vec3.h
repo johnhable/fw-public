@@ -1,6 +1,8 @@
 #ifndef _VEC3_H_
 #define _VEC3_H_
 
+#include <math.h>
+
 #include "CoreHelpers.h"
 
 struct Vec3
