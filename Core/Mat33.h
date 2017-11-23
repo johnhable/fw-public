@@ -5,9 +5,8 @@
 
 #include "Vec3.h"
 
-class Mat33
+struct Mat33
 {
-public:
 	Mat33();
 	Mat33(const float srcData[9]);
 	Mat33(const float srcData[3][3]);
